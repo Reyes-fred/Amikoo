@@ -93,7 +93,7 @@ function periodicActivity() {
 //client.end();
 }
 
-setInterval(periodicActivity, 1000);
+setInterval(periodicActivity, 500);
 
 
 
