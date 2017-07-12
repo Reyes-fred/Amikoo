@@ -7,7 +7,12 @@ sleep 4
 git clone https://github.com/TheIoTLearningInitiative/CodeLabs.git
 
 cd CodeLabs/
-sh Chichenitza/setup/setup.sh
+
+opkg update
+
+sleep 4
+
+sh ChichenItza/setup/setup.sh
 
 sleep 4
 
