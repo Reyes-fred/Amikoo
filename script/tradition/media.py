@@ -12,7 +12,7 @@ if(message[1] == 'Random'):
   file = randomfile
   nombre=file
 elif(message[1] == "Stop"):
-  os.system('killall -9 aplay')
+  os.system('killall -9 mpg123')
   os.system('killall -9 vlc')
   os.system('killall -9 feh')
   sys.exit()
@@ -29,7 +29,7 @@ elif(tipo == "Image"):
 
 elif(tipo == "Video"):
    path2 = path+message[0]+"/Video/"+nombre
-   os.system("vlc -ldummy --fullscreen "+nombre)
+   os.system("cvlc --no-video-title-show --fullscreen "+path2)
 
 else:
  print("error")
