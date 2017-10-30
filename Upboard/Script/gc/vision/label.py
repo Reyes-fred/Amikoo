@@ -2,6 +2,7 @@ import argparse
 import base64
 import httplib2
 import os
+from time import sleep
 
 from apiclient.discovery import build
 from oauth2client.client import GoogleCredentials
@@ -10,6 +11,8 @@ from google.cloud import translate
 
 def main():
 
+ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/norman/Documents/Vision2-befbab1fbecb.json"
+ 
  API_DISCOVERY_FILE = 'https://vision.googleapis.com/$discovery/rest?version=v1'
  http = httplib2.Http()
 
@@ -23,6 +26,7 @@ def main():
  target = 'es'
 
  os.system('espeak -v es-la -a 200 "Ahora tomare la foto"')  
+ sleep(2)
  os.system('fswebcam -r 640x480 --jpeg 85 -D 1 reconoce.jpg')  
  sleep(5)
 
@@ -51,9 +55,12 @@ def main():
          break
    translation = translate_client.translate(opcion,target_language=target)
    print(translation['translatedText'])    
-   string = "Creo que es " + str(translation['translatedText'])    
+   string = "Creo que es " + str(translation['translatedText']) 
+   os.system('feh -F reconoce.jpg &')   
    os.system('espeak -v es-la -a 200 "{}"'.format(string))
+   os.system('killall -9 feh')
    return 0 
 
 if __name__ == '__main__':
  main()
+
