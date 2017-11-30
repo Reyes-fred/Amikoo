@@ -1,15 +1,21 @@
 import os
 import datetime
 import shutil
+import time
 
 def main():
+  os.system("killall -9 eog")
   now = datetime.datetime.now()
   name = str(now.year)+"-"+str(now.month)+"-"+str(now.day)+"-"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)
   name = str(name)+".jpg"
-  os.system("fswebcam -r 4096x2304 --jpeg 100 --no-banner " + name)
-  shutil.move(name,"/home/alfredo/tdb/"+name)
-  os.system("feh -F /home/alfredo/tdb/"+name)
-  return 0
+  os.system("fswebcam -r 800x480 --jpeg 80 --no-banner --save " + name)
+  os.system("mv "+name+" /home/norman/Desktop/photos/"+name)
+  #shutil.move(name,"/home/norman/Desktop/photos/"+name)
+  #time.sleep(1)
+  os.system("eog -f /home/norman/Desktop/photos/"+name+" &")
+  time.sleep(3)
+  os.system("killall -9 eog")
+  return 0  
 
 if __name__ == '__main__':
  main()

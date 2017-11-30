@@ -4,7 +4,7 @@ import os,random
 tipo = sys.argv[1]
 message = sys.argv[2];
 message = message.split("/")
-path = "/home/alfredo/archivos/"
+path = "/home/norman/Desktop/Data/"
 
 
 if(message[1] == 'Random'):
@@ -21,6 +21,7 @@ else:
 
 if(tipo == 'Sound'):
   path2 = path+message[0]+"/Sound/"+nombre
+  print(path2)
   os.system('mpg123 '+path2)
 
 elif(tipo == "Image"):

@@ -1,6 +1,7 @@
 const mqtt = require('mqtt')  
 //const client = mqtt.connect('mqtt://iot.eclipse.org')
-const client = mqtt.connect('mqtt://192.168.100.12')
+const client = mqtt.connect('mqtt://10.215.56.158')
+//const client = mqtt.connect('mqtt://192.168.1.114')
 
 var sys = require('sys')
 var exec = require('child_process').exec;
@@ -35,7 +36,7 @@ client.on('connect', function () {
   client.subscribe('amikoo/gc/visionapi')
   client.subscribe('amikoo/gc/translatationapi')
   
-  client.subscribe('amikoo/tradition/audio')
+  client.subscribe('amikoo/tradition/sound')
   client.subscribe('amikoo/tradition/image')
   client.subscribe('amikoo/tradition/video')
 
@@ -58,8 +59,8 @@ client.on('message', function (topic, message) {
   if(ban==0){
   process.chdir("../")}
   ban=1;
-  var directorio = process.cwd()+"/Script"
-
+  //var directorio = process.cwd()+"/Script"
+  var directorio = "/home/norman/Desktop/Amikoo/Upboard/Script"
   switch (topic) {
     case 'amikoo/open':
       return handleRequestOpen(message)
@@ -78,9 +79,10 @@ client.on('message', function (topic, message) {
       var comando = directorio+"/gc/translate/traduccionfinal.py"
       return exec("pyhton3 "+comando)
 
-    case 'amikoo/tradition/audio':
+    case 'amikoo/tradition/sound':
       var directorio1=directorio+"/tradition/media.py"
       var comando = "python3 "+directorio1+" Sound "+message
+      console.log(comando)
       return exec(comando)
     case 'amikoo/tradition/image':
       var directorio1=directorio+"/tradition/media.py"
@@ -93,7 +95,8 @@ client.on('message', function (topic, message) {
     
     case 'amikoo/camera/picture':
       var comando = directorio+"/camera/picture.py"
-      return exec('python3 '+comando)
+      console.log('python '+comando)
+      return exec('python '+comando)
  
     case 'amikoo/inicial':
       return handleSpeakAmikoo('Hola a todos!')
