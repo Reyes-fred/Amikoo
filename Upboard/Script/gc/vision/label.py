@@ -11,7 +11,7 @@ from google.cloud import translate
 
 def main():
 
- os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/norman/Documents/Vision2-befbab1fbecb.json"
+ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/lupe/Documents/Vision2-befbab1fbecb.json"
  
  API_DISCOVERY_FILE = 'https://vision.googleapis.com/$discovery/rest?version=v1'
  http = httplib2.Http()
@@ -25,7 +25,7 @@ def main():
  translate_client = translate.Client()
  target = 'es'
 
- os.system('espeak -v es-la -a 200 "Ahora tomare la foto"')  
+ os.system('espeak -v es-la -a 200 "Ahora tomare la foto, porfavor acerca el objeto a mi camara"')  
  sleep(2)
  os.system('fswebcam -r 640x480 --jpeg 85 -D 1 reconoce.jpg')  
  sleep(5)

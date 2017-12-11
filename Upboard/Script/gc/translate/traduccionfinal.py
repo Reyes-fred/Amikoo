@@ -8,7 +8,7 @@ import os
 from google.cloud import translate
 import speech_recognition as sr
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/norman/Documents/Vision2-befbab1fbecb.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/lupe/Documents/Vision2-befbab1fbecb.json"
 
 translate_client = translate.Client()
 r = sr.Recognizer()
@@ -20,7 +20,7 @@ os.system('espeak -v en -a 200 "I would translate your message"')
 with sr.Microphone() as source:
     r.adjust_for_ambient_noise(source,duration=5)
     print("Say something")
-    os.system('feh -F /home/norman/Desktop/Traduccion/maxresdefault.jpg &')	
+    os.system('feh -F /home/lupe/Desktop/Traduccion/maxresdefault.jpg &')	
     audio = r.listen(source)
 
 # recognize speech using Google Speech Recognition

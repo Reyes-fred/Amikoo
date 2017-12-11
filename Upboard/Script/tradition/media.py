@@ -4,7 +4,7 @@ import os,random
 tipo = sys.argv[1]
 message = sys.argv[2];
 message = message.split("/")
-path = "/home/norman/Desktop/Data/"
+path = "/home/lupe/Desktop/Data/"
 
 
 if(message[1] == 'Random'):

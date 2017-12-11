@@ -9,10 +9,10 @@ def main():
   name = str(now.year)+"-"+str(now.month)+"-"+str(now.day)+"-"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)
   name = str(name)+".jpg"
   os.system("fswebcam -r 800x480 --jpeg 80 --no-banner --save " + name)
-  os.system("mv "+name+" /home/norman/Desktop/photos/"+name)
-  #shutil.move(name,"/home/norman/Desktop/photos/"+name)
+  os.system("mv "+name+" /home/lupe/Desktop/photos/"+name)
+  #shutil.move(name,"/home/lupe/Desktop/photos/"+name)
   #time.sleep(1)
-  os.system("eog -f /home/norman/Desktop/photos/"+name+" &")
+  os.system("eog -f /home/lupe/Desktop/photos/"+name+" &")
   time.sleep(3)
   os.system("killall -9 eog")
   return 0  
