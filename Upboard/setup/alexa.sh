@@ -4,9 +4,7 @@ echo
 
 sleep 4
 
-cd ~/Amikoo
-mkdir Alexa
-cd ~/Amikoo/Alexa
+cd ~/Desktop/Amikoo/
 
 git clone https://github.com/devicehive/AlexaDevice.git
 

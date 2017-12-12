@@ -1,6 +1,6 @@
 const mqtt = require('mqtt')  
-const client = mqtt.connect('mqtt://iot.eclipse.org')
-//const client = mqtt.connect('mqtt://10.215.56.158')
+//const client = mqtt.connect('mqtt://iot.eclipse.org')
+const client = mqtt.connect('mqtt://10.215.56.158')
 //const client = mqtt.connect('mqtt://192.168.1.130')
 
 var sys = require('sys')
@@ -24,16 +24,26 @@ function talk(phrase,languaje){
 }
 
 function servicealexa(command){
-  //var directorio = "/home/lupe/AlexaDevice/alexa.py"
   if(command=='start'){
     var spawn = require("child_process").spawn
-    return spawn('sh', ['/home/lupe/AlexaDevice/run.sh'], {detached:true, stdio: 'ignore'})
+    exec("echo Ahora sere alexa | espeak -ves -w audio.wav", puts);
+    exec("aplay audio.wav", puts);
+    return spawn('sh', ['/home/norman/Desktop/Amikoo/AlexaDevice/run.sh'], {detached:true, stdio: 'ignore'})
   }
   if(command=='stop'){
      return exec("killall -9 python3")
   }
-
 }
+
+function servicegoogle(command){
+  if(command=='start'){
+     return exec("google-assistant-demo")
+  }
+  if(command=='stop'){
+     return exec("killall -9 google-assistant-demo")
+  }
+}
+
 
 var state = 'closed'
 
@@ -61,6 +71,8 @@ client.on('connect', function () {
   
   client.subscribe('amikoo/amazon/alexa')
 
+  client.subscribe('amikoo/google/assistant')
+
   client.publish('amikoo/connected', 'true')
   sendStateUpdate()
 })
@@ -72,7 +84,7 @@ client.on('message', function (topic, message) {
   process.chdir("../")}
   ban=1;
   //var directorio = process.cwd()+"/Script"
-  var directorio = "/home/lupe/Desktop/Amikoo/Upboard/Script"
+  var directorio = "/home/norman/Desktop/Amikoo/Upboard/Script"
   switch (topic) {
     case 'amikoo/open':
       return handleRequestOpen(message)
@@ -123,6 +135,9 @@ client.on('message', function (topic, message) {
 
     case 'amikoo/amazon/alexa':
       return servicealexa(message)
+    case 'amikoo/google/assistant':
+      return servicegoogle(message)
+
   }
 })
 
