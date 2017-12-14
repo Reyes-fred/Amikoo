@@ -14,6 +14,7 @@ sudo apt-get install vlc
 
 npm install mqtt --save
 
-
-
+python3 -m pip install google-cloud
+python3 -m pip install speechrecognition
+python3 -m pip install --upgrade google-api-python-client
 
