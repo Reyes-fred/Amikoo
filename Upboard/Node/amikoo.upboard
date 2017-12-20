@@ -3,7 +3,7 @@ const client = mqtt.connect('mqtt://iot.eclipse.org')
 //const client = mqtt.connect('mqtt://10.215.56.158')
 //const client = mqtt.connect('mqtt://192.168.1.130')
 
-var tipo= 0 //0-espeak   1-festival  
+var tipo= 1 //0-espeak   1-festival  
 var sys = require('sys')
 var exec = require('child_process').exec;
 var ban = 0
@@ -40,8 +40,14 @@ function talk(phrase,languaje,voz){
 function servicealexa(command){
   if(command=='start'){
     var spawn = require("child_process").spawn
-    exec("echo Ahora sere alexa | espeak -ves -w audio.wav", puts);
-    exec("aplay audio.wav", puts);
+
+	 if(voz==0){
+     		exec("echo Ahora sere alexa | espeak -ves -w audio.wav", puts);
+     		exec("aplay audio.wav", puts);
+    	} else if(voz==1){
+        	var comando = "echo 'Ahora sere alexa' | text2wave -eval '(voice_JuntaDeAndalucia_e$
+        	exec(comando)}
+
     return spawn('sh', ['/home/norman/Desktop/Amikoo/AlexaDevice/run.sh'], {detached:true, stdio: 'ignore'})
   }
   if(command=='stop'){
