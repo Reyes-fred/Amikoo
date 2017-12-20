@@ -18,3 +18,4 @@ python3 -m pip install google-cloud
 python3 -m pip install speechrecognition
 python3 -m pip install --upgrade google-api-python-client
 
+sudo apt-get install festival festvox-ellpc11k
