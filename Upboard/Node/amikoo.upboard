@@ -1,11 +1,13 @@
 const mqtt = require('mqtt')  
-//const client = mqtt.connect('mqtt://iot.eclipse.org')
-const client = mqtt.connect('mqtt://10.215.56.158')
+const client = mqtt.connect('mqtt://iot.eclipse.org')
+//const client = mqtt.connect('mqtt://10.215.56.158')
 //const client = mqtt.connect('mqtt://192.168.1.130')
 
+var tipo= 0 //0-espeak   1-festival  
 var sys = require('sys')
 var exec = require('child_process').exec;
 var ban = 0
+
 function puts(error, stdout, stderr) { sys.puts(stdout) }
 
 function espeak(phrase) {
@@ -15,12 +17,24 @@ function espeak(phrase) {
   exec("aplay audio.wav", puts);  
 }
 
-function talk(phrase,languaje){
+function talk(phrase,languaje,voz){
   if(languaje==1){
-    exec("echo " + phrase + " | espeak -ves -w audio.wav", puts);}
+    if(voz==0){
+     exec("echo " + phrase + " | espeak -ves -w audio.wav", puts);
+     exec("aplay audio.wav", puts);  
+    } else if(voz==1){
+        var comando = "echo '" + phrase + "' | text2wave -eval '(voice_JuntaDeAndalucia_es_pa_diphone)' > /tmp/audio.wav && aplay /tmp/audio.wav"
+        exec(comando)}
+   }
   else{
-    exec("echo " + phrase + " | espeak -ven -w audio.wav", puts);}
-    exec("aplay audio.wav", puts);  
+    if(voz==0){
+      exec("echo " + phrase + " | espeak -ven -w audio.wav", puts);
+      exec("aplay audio.wav", puts);
+      }  
+        else if(voz==1){
+         var comando = "echo '" + phrase + "' | text2wave -eval '(voice_kal_diphone)' > /tmp/audio.wav && aplay /tmp/audio.wav"
+         exec(comando)}    
+    }
 }
 
 function servicealexa(command){
@@ -44,6 +58,18 @@ function servicegoogle(command){
   }
 }
 
+function changevoice(command){
+    if(command=='espeak'){
+        exec("echo Espeak | espeak -ves -w audio.wav", puts);
+    	exec("aplay audio.wav", puts);
+	tipo=0;
+	}else if(command=='festival'){
+         exec("echo festival | espeak -ves -w audio.wav", puts);
+	 exec("aplay audio.wav", puts);
+        tipo=1;}
+  return tipo;
+}
+
 
 var state = 'closed'
 
@@ -53,6 +79,7 @@ client.on('connect', function () {
   
   client.subscribe('amikoo/sound/speechsynthetizer/say')
   client.subscribe('amikoo/sound/speechsynthetizer/decir')
+  client.subscribe('amikoo/sound/speechsynthetizer/voice')
 
   client.subscribe('amikoo/gc/visionapi')
   client.subscribe('amikoo/gc/translatationapi')
@@ -92,9 +119,11 @@ client.on('message', function (topic, message) {
       return handleRequestClose(message)
    
     case 'amikoo/sound/speechsynthetizer/say':
-      return handleRequestSay(message,0)
+      return handleRequestSay(message,0,tipo)
     case 'amikoo/sound/speechsynthetizer/decir':
-      return handleRequestSay(message,1)
+      return handleRequestSay(message,1,tipo)
+    case 'amikoo/sound/speechsynthetizer/voice':
+      return changevoice(message)
 
     case 'amikoo/gc/visionapi':
       var comando = directorio+"/gc/vision/label.py"
@@ -106,7 +135,6 @@ client.on('message', function (topic, message) {
     case 'amikoo/tradition/sound':
       var directorio1=directorio+"/tradition/media.py"
       var comando = "python3 "+directorio1+" Sound "+message
-      console.log(comando)
       return exec(comando)
     case 'amikoo/tradition/image':
       var directorio1=directorio+"/tradition/media.py"
@@ -175,7 +203,7 @@ function handleRequestClose (message) {
 }
 
 function handleRequestSay (message,languaje) {
-    talk(message,languaje)
+    talk(message,languaje,tipo)
 }
 
 function handleAmikoo (message) {
