@@ -3,7 +3,7 @@ const client = mqtt.connect('mqtt://iot.eclipse.org')
 //const client = mqtt.connect('mqtt://10.215.56.158')
 //const client = mqtt.connect('mqtt://192.168.1.130')
 
-var tipo= 1 //0-espeak   1-festival  
+var tipo= 0 //0-espeak   1-festival  
 var sys = require('sys')
 var exec = require('child_process').exec;
 var ban = 0
@@ -18,22 +18,30 @@ function espeak(phrase) {
 }
 
 function talk(phrase,languaje,voz){
-  if(languaje==1){
+  var idioma=""
+  var idioma2=""
+  if(languaje==0){
+   idioma="ves"
+   idioma2="voice_JuntaDeAndalucia_es_pa_diphone"
+  }
+  else if(languaje==1){
+   idioma="ven"
+   idioma2="voice_kal_diphone)"
+  }
+  else if(languaje==2){
+   idioma="vde"
+  }
+  else{
+   idioma="ves"
+   idioma2="voice_JuntaDeAndalucia_es_pa_diphone"
+  }
+
     if(voz==0){
-     exec("echo " + phrase + " | espeak -ves -w audio.wav", puts);
+     exec("echo " + phrase + " | espeak -"+idioma+" -w audio.wav", puts);
      exec("aplay audio.wav", puts);  
     } else if(voz==1){
-        var comando = "echo '" + phrase + "' | text2wave -eval '(voice_JuntaDeAndalucia_es_pa_diphone)' > /tmp/audio.wav && aplay /tmp/audio.wav"
-        exec(comando)}
-   }
-  else{
-    if(voz==0){
-      exec("echo " + phrase + " | espeak -ven -w audio.wav", puts);
-      exec("aplay audio.wav", puts);
-      }  
-        else if(voz==1){
-         var comando = "echo '" + phrase + "' | text2wave -eval '(voice_kal_diphone)' > /tmp/audio.wav && aplay /tmp/audio.wav"
-         exec(comando)}    
+        var comando = "echo '" + phrase + "' | text2wave -eval '("+idioma2+")' > /tmp/audio.wav && aplay /tmp/audio.wav"
+        exec(comando)
     }
 }
 
@@ -45,7 +53,7 @@ function servicealexa(command){
      		exec("echo Ahora sere alexa | espeak -ves -w audio.wav", puts);
      		exec("aplay audio.wav", puts);
     	} else if(voz==1){
-        	var comando = "echo 'Ahora sere alexa' | text2wave -eval '(voice_JuntaDeAndalucia_e$
+        	var comando = "echo 'Ahora sere alexa' | text2wave -eval '(voice_JuntaDeAndalucia__es_pa_diphone)' > /tmp/audio.wav && aplay /tmp/audio.wav"
         	exec(comando)}
 
     return spawn('sh', ['/home/norman/Desktop/Amikoo/AlexaDevice/run.sh'], {detached:true, stdio: 'ignore'})
@@ -85,6 +93,7 @@ client.on('connect', function () {
   
   client.subscribe('amikoo/sound/speechsynthetizer/say')
   client.subscribe('amikoo/sound/speechsynthetizer/decir')
+  client.subscribe('amikoo/sound/speechsynthetizer/sagen')
   client.subscribe('amikoo/sound/speechsynthetizer/voice')
 
   client.subscribe('amikoo/gc/visionapi')
@@ -125,9 +134,11 @@ client.on('message', function (topic, message) {
       return handleRequestClose(message)
    
     case 'amikoo/sound/speechsynthetizer/say':
-      return handleRequestSay(message,0,tipo)
-    case 'amikoo/sound/speechsynthetizer/decir':
       return handleRequestSay(message,1,tipo)
+    case 'amikoo/sound/speechsynthetizer/decir':
+      return handleRequestSay(message,0,tipo)
+    case 'amikoo/sound/speechsynthetizer/sagen':
+      return handleRequestSay(message,2,tipo)
     case 'amikoo/sound/speechsynthetizer/voice':
       return changevoice(message)
 
